@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  STUDENT
+  FACULTY
+  ADMIN
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  email    String @unique @db.VarChar(255)
+  password String @db.VarChar(255) // Always hash passwords (e.g., bcrypt)
+  role     Role
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  faculty Faculty?
+  student Student?
+
+  @@map("users")
+}
+
+model Student {
+  id               Int            @id @default(autoincrement())
+  userId           Int            @unique
+  name             String         @db.VarChar(100)
+  department       String         @db.VarChar(100)
+  researchInterest String?        @db.Text
+  contributions    Contribution[]
+  thesisID         Int?
+  user             User           @relation(fields: [userId], references: [id])
+
+  @@map("students")
+}
+
+model Faculty {
+  id               Int            @id @default(autoincrement())
+  userId           Int            @unique
+  name             String         @db.VarChar(100)
+  department       String         @db.VarChar(100)
+  researchInterest String?        @db.Text
+  contributions    Contribution[]
+  availableSlots   Int            @default(0) // Renamed to camelCase for consistency
+  user             User           @relation(fields: [userId], references: [id])
+
+  @@map("faculties")
+}
+
+model Contribution {
+  id          Int      @id @default(autoincrement())
+  title       String   @db.VarChar(100)
+  subtitle    String   @db.VarChar(255)
+  description String   @db.Text // For longer text
+  url         String?  @db.VarChar(255) // Optional URL
+  createdAt   DateTime @default(now())
+
+  studentId Int?     @unique
+  facultyId Int?     @unique
+  student   Student? @relation(fields: [studentId], references: [id])
+  faculty   Faculty? @relation(fields: [facultyId], references: [id])
+
+  @@map("contributions")
+}
