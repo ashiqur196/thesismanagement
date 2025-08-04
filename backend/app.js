@@ -6,6 +6,8 @@ const app = express();
 app.use(cors());
 
 const authRoute = require("./routes/auth");
+const profileRoute = require("./routes/profile");
+const staticRoute = require("./routes/static");
 // const adminRoute = require("./routes/admin");
 // const studentRoute = require("./routes/student");
 // const facultyRoute = require("./routes/faculty");
@@ -13,6 +15,8 @@ const authRoute = require("./routes/auth");
 app.use(bodyParser.json());
 
 app.use("/auth", authRoute);
+app.use("/account", profileRoute);
+app.use("/static", staticRoute);
 // app.use("/student", studentRoute);
 // app.use("/faculty", facultyRoute);
 // app.use("/admin", adminRoute);

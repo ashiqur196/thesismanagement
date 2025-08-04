@@ -44,7 +44,6 @@ async function login(req, res) {
     // 5. Prepare user data for token
     const userData = {
       userId: user.id,
-      email: user.email,
       role: user.role,
       name: user.role === "STUDENT" ? user.student?.name : user.faculty?.name,
     };
@@ -64,6 +63,7 @@ async function login(req, res) {
       user: {
         id: user.id,
         email: user.email,
+        image: user.image,
         role: user.role,
         name: userData.name,
       },

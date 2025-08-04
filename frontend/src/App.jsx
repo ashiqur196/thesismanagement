@@ -1,15 +1,19 @@
-import Signin from "./auth/Signin"
+import { BrowserRouter } from 'react-router-dom';
+import { AuthProvider } from './contexts/authContext';
+import { Toaster } from 'sonner';
+import Router from './Router';
 
 function App() {
-
-  return ( 
-    <>
-      <div className="h-screen w-full mx-auto flex flex-col items-center justify-center">
-          <Signin/>
-      </div>
-    
-    </>
-  )
+  return (
+    <BrowserRouter>
+      <AuthProvider>
+        <div className="mx-auto">
+          <Toaster position='top-right' />
+          <Router />
+        </div>
+      </AuthProvider>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;

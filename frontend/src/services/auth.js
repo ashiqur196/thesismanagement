@@ -24,4 +24,19 @@ export const authService = {
       return { success: false, message: err.message || "Registration failed" };
     }
   },
+
+  async checkToken() {
+    try {
+      const response = await api.get("/auth/checktoken");
+      return response.data;
+    } catch (err) {
+      if (err.response && err.response.data) {
+        return err.response.data;
+      }
+      return {
+        success: false,
+        message: err.message || "Token verification failed",
+      };
+    }
+  },
 };

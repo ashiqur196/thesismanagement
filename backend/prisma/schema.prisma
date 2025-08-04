@@ -14,9 +14,10 @@ enum Role {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  email    String @unique @db.VarChar(255)
-  password String @db.VarChar(255) // Always hash passwords (e.g., bcrypt)
+  id       Int     @id @default(autoincrement())
+  email    String  @unique @db.VarChar(255)
+  password String  @db.VarChar(255) // Always hash passwords (e.g., bcrypt)
+  image    String? @db.VarChar(255)
   role     Role
 
   createdAt DateTime @default(now())
@@ -34,7 +35,8 @@ model Student {
   userId           Int            @unique
   name             String         @db.VarChar(100)
   department       String         @db.VarChar(100)
-  researchInterest String?        @db.Text
+  about            String?        @db.Text
+  researchInterest String?        @db.Text // comma seperated string xyz;xyz;xyz
   contributions    Contribution[]
   thesisID         Int?
   user             User           @relation(fields: [userId], references: [id])
@@ -47,7 +49,8 @@ model Faculty {
   userId           Int            @unique
   name             String         @db.VarChar(100)
   department       String         @db.VarChar(100)
-  researchInterest String?        @db.Text
+  about            String?        @db.Text
+  researchInterest String?        @db.Text // comma seperated string xyz;xyz;xyz 
   contributions    Contribution[]
   availableSlots   Int            @default(0) // Renamed to camelCase for consistency
   user             User           @relation(fields: [userId], references: [id])
