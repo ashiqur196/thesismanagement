@@ -219,7 +219,7 @@ export default function EditProfile() {
 
   if (loading) {
     return (
-      <Card>
+      <Card className={"w-full max-w-3xl"}>
         <CardHeader>
           <CardTitle>My Profile</CardTitle>
         </CardHeader>
@@ -232,7 +232,7 @@ export default function EditProfile() {
 
   if (!profile) {
     return (
-      <Card>
+      <Card className={"w-full max-w-3xl"}>
         <CardHeader>
           <CardTitle>My Profile</CardTitle>
         </CardHeader>
@@ -247,7 +247,7 @@ export default function EditProfile() {
   }
 
   return (
-    <div className="space-y-6 mx-auto w-full max-w-3xl">
+    <div className="space-y-6 w-full max-w-3xl">
       <Tabs defaultValue="profile" className="w-full">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="profile">Profile Information</TabsTrigger>
@@ -279,7 +279,7 @@ export default function EditProfile() {
                   <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 rounded-full transition-opacity">
                     <Button
                       variant="ghost"
-                      className="text-white hover:text-white"
+                      className="text-white hover:text-black cursor-pointer"
                       onClick={triggerFileInput}
                     >
                       Change

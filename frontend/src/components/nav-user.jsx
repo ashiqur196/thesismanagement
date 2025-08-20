@@ -96,11 +96,11 @@ export function NavUser() {
             <DropdownMenuSeparator />
 
             <DropdownMenuGroup>
-              <DropdownMenuItem onClick={() => handleNavigation("/profile")}>
+              <DropdownMenuItem onClick={() => handleNavigation("/account/profile")}>
                 <User className="mr-2 h-4 w-4" />
                 My Profile
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleNavigation("/settings")}>
+              <DropdownMenuItem onClick={() => handleNavigation("/account/edit")}>
                 <Settings className="mr-2 h-4 w-4" />
                 Settings
               </DropdownMenuItem>

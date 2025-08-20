@@ -3,6 +3,7 @@ CREATE TABLE `users` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `email` VARCHAR(255) NOT NULL,
     `password` VARCHAR(255) NOT NULL,
+    `image` VARCHAR(255) NULL,
     `role` ENUM('STUDENT', 'FACULTY', 'ADMIN') NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
@@ -17,7 +18,8 @@ CREATE TABLE `students` (
     `userId` INTEGER NOT NULL,
     `name` VARCHAR(100) NOT NULL,
     `department` VARCHAR(100) NOT NULL,
-    `researchInterest` VARCHAR(255) NOT NULL,
+    `about` TEXT NULL,
+    `researchInterest` TEXT NULL,
     `thesisID` INTEGER NULL,
 
     UNIQUE INDEX `students_userId_key`(`userId`),
@@ -30,7 +32,8 @@ CREATE TABLE `faculties` (
     `userId` INTEGER NOT NULL,
     `name` VARCHAR(100) NOT NULL,
     `department` VARCHAR(100) NOT NULL,
-    `researchInterest` VARCHAR(255) NOT NULL,
+    `about` TEXT NULL,
+    `researchInterest` TEXT NULL,
     `availableSlots` INTEGER NOT NULL DEFAULT 0,
 
     UNIQUE INDEX `faculties_userId_key`(`userId`),
@@ -48,8 +51,6 @@ CREATE TABLE `contributions` (
     `studentId` INTEGER NULL,
     `facultyId` INTEGER NULL,
 
-    UNIQUE INDEX `contributions_studentId_key`(`studentId`),
-    UNIQUE INDEX `contributions_facultyId_key`(`facultyId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 

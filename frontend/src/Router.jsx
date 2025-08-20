@@ -1,23 +1,41 @@
 // Router.tsx
-import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
-import { useAuth } from './contexts/authContext';
-import SignIn from './auth/Signin';
-import SignUp from './auth/Signup';
-import Home from './pages/Home';
-import Myprofile from './pages/accountSettings/Myprofile';
-import Contributions from './pages/accountSettings/Contributions';
-import Editprofile from './pages/accountSettings/Editprofile';
-import SidebarLayout from './components/sidebar-layout';
+import { Routes, Route, Navigate, Outlet } from "react-router-dom";
+import { useAuth } from "./contexts/authContext";
+import SidebarLayout from "./components/sidebar-layout";
+import ThesisLayout from "./components/ThesisLayout";
+
+// Auth components
+import SignIn from "./auth/Signin";
+import SignUp from "./auth/Signup";
+
+//Account settings components
+import Myprofile from "./pages/accountSettings/Myprofile";
+import Contributions from "./pages/accountSettings/Contributions";
+import Editprofile from "./pages/accountSettings/Editprofile";
+
+//Primary sidebar components
+import Home from "./pages/Home";
+import CreateThesis from "./pages/createThesis/CreateThesis";
+import MyThesis from "./pages/myThesis/MyThesis";
+
+//Thesis Sidebar components
+import ThesisOverview from "./pages/thesisPages/thesisOverview/ThesisOverview";
+import ThesisTasks from "./pages/thesisPages/thesisTasks/ThesisTasks";
+import ThesisResources from "./pages/thesisPages/thesisResources/ThesisResources";
+import ThesisAppointments from "./pages/thesisPages/thesisAppointments/ThesisAppointments";
+import EditThesis from "./pages/thesisPages/thesisSettings/EditThesis";
+import ThesisCollaborators from "./pages/thesisPages/thesisSettings/ThesisCollaborators";
+import DeleteThesis from "./pages/thesisPages/thesisSettings/DeleteThesis";
 
 const PrivateRoute = () => {
-  const { isAuthenticated } = useAuth()
-  return isAuthenticated ? <Outlet /> : <Navigate to="/auth/signin" replace />
-}
+  const { isAuthenticated } = useAuth();
+  return isAuthenticated ? <Outlet /> : <Navigate to="/auth/signin" replace />;
+};
 
 const AuthRoute = () => {
-  const { isAuthenticated } = useAuth()
-  return !isAuthenticated ? <Outlet /> : <Navigate to="/" replace />
-}
+  const { isAuthenticated } = useAuth();
+  return !isAuthenticated ? <Outlet /> : <Navigate to="/" replace />;
+};
 
 export default function Router() {
   return (
@@ -32,15 +50,29 @@ export default function Router() {
       <Route element={<PrivateRoute />}>
         <Route element={<SidebarLayout />}>
           <Route path="/" element={<Home />} />
+          <Route path="/createthesis" element={<CreateThesis />} />
+          <Route path="/mythesis" element={<MyThesis />} />
           <Route path="/account/profile" element={<Myprofile />} />
-          <Route path="/account/edit" element={<Editprofile/>} />
+          <Route path="/account/edit" element={<Editprofile />} />
           <Route path="/account/contributions" element={<Contributions />} />
-          {/* Add more protected routes here */}
+        </Route>
+        <Route path="/thesis/:thesisId" element={<ThesisLayout />}>
+          <Route index element={<ThesisOverview />} />
+          <Route path="tasks" element={<ThesisTasks />} />
+          <Route path="appointments" element={<ThesisAppointments />} />
+          <Route path="resources" element={<ThesisResources />} />
+          <Route path="settings">
+            <Route index element={<Navigate to="edit" replace />} />
+            <Route path="edit" element={<EditThesis />} />
+            <Route path="collaborators" element={<ThesisCollaborators />} />
+            <Route path="delete" element={<DeleteThesis />} />
+          </Route>
+          {/* Add more thesis subroutes here */}
         </Route>
       </Route>
 
       {/* Catch all */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
-  )
+  );
 }

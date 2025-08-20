@@ -14,9 +14,19 @@ import {
 import { Badge } from "../../components/ui/badge";
 import { Button } from "../../components/ui/button";
 import { toast } from "sonner";
-import { Link } from "react-router-dom";
 import { getProfileImage } from "../../services/getPicture";
 
+function DepartmentMap(dept){
+  if (dept === "CSE"){
+    return "Computer Science and Engineering"
+  }
+  if (dept === "MNS"){
+    return "Maths and Natural Science"
+  }
+  if (dept === "EEE"){
+    return "Electronics and Electrical Engineering"
+  }
+}
 export default function Myprofile() {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -78,8 +88,7 @@ export default function Myprofile() {
   }
 
   return (
-    <Card>
-      
+    <Card className={"w-full max-w-3xl"}>
       <CardContent className="space-y-4">
         <div className="flex flex-col gap-4">
           <Avatar className="h-24 w-24">
@@ -108,7 +117,7 @@ export default function Myprofile() {
 
         <div>
           <p className="text-sm text-muted-foreground">Department</p>
-          <p className="font-medium">{profile.department}</p>
+          <p className="font-medium">{DepartmentMap(profile.department)}</p>
         </div>
 
         {profile.about && (

@@ -46,9 +46,13 @@ export const profileService = {
     }
   },
 
-  async getContributions() {
+  async getContributions(userId) {
     try {
-      const response = await api.get("/account/profile/contributions");
+      const response = await api.get("/account/contributions", {
+        params: {
+          id: userId,
+        },
+      });
       return response.data;
     } catch (err) {
       if (err.response && err.response.data) {
@@ -60,10 +64,41 @@ export const profileService = {
       };
     }
   },
-
+  async updateContribution(data) {
+    try {
+      const response = await api.put("/account/contributions", data);
+      return response.data;
+    } catch (err) {
+      if (err.response && err.response.data) {
+        return err.response.data;
+      }
+      return {
+        success: false,
+        message: err.message || "Failed to update contribution",
+      };
+    }
+  },
+  async deleteContribution(id) {
+    try {
+      const response = await api.delete("/account/contributions",{
+        params:{
+          id
+        }
+      });
+      return response.data;
+    } catch (err) {
+      if (err.response && err.response.data) {
+        return err.response.data;
+      }
+      return {
+        success: false,
+        message: err.message || "Failed to delete contribution",
+      };
+    }
+  },
   async addContribution(data) {
     try {
-      const response = await api.post("/account/profile/contributions", data);
+      const response = await api.post("/account/contributions", data);
       return response.data;
     } catch (err) {
       if (err.response && err.response.data) {

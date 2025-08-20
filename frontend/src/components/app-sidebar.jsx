@@ -7,8 +7,6 @@ import {
   Library,
   NotebookPen,
   Settings,
-  User,
-  Users,
 } from "lucide-react";
 import { NavMain } from "./nav-main";
 import { NavUser } from "./nav-user";
