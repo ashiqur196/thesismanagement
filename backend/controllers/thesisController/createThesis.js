@@ -80,6 +80,7 @@ function generateThesisCode(title) {
   return `${initials}-${randomSuffix}`;
 }
 
+
 // Helper function to generate a random password
 function generateRandomPassword() {
   const length = 8;

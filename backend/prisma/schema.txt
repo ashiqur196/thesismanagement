@@ -1,0 +1,217 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "mysql"
+    url      = env("DATABASE_URL")
+}
+
+enum Role {
+    STUDENT
+    FACULTY
+    ADMIN
+}
+
+enum ThesisStatus {
+    ACTIVE
+    INACTIVE
+    PENDING_SUPERVISOR
+}
+
+enum TaskStatus {
+    PENDING
+    IN_PROGRESS
+    COMPLETED
+    OVERDUE
+}
+
+enum NotificationType {
+    SUPERVISOR_REQUEST
+    TASK_ASSIGNED
+    SUBMISSION_FEEDBACK
+    APPOINTMENT
+    GENERAL
+}
+
+enum NotificationStatus {
+    UNREAD
+    READ
+}
+
+model User {
+    id       Int     @id @default(autoincrement())
+    email    String  @unique @db.VarChar(255)
+    password String  @db.VarChar(255) // Always hash passwords (e.g., bcrypt)
+    image    String? @db.VarChar(255)
+    role     Role
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    // Relations
+    faculty Faculty?
+    student Student?
+    notifications Notification[]
+
+    @@map("users")
+}
+
+model Student {
+    id               Int            @id @default(autoincrement())
+    userId           Int            @unique
+    name             String         @db.VarChar(100)
+    department       String         @db.VarChar(100)
+    about            String?        @db.Text
+    researchInterest String?        @db.Text // comma seperated string xyz;xyz;xyz
+    contributions    Contribution[]
+
+    user              User                @relation(fields: [userId], references: [id])
+    ThesisMember      ThesisMember[]
+    SupervisorRequest SupervisorRequest[]
+    submissions       Submission[]
+
+    @@map("students")
+}
+
+model Faculty {
+    id               Int            @id @default(autoincrement())
+    userId           Int            @unique
+    name             String         @db.VarChar(100)
+    department       String         @db.VarChar(100)
+    about            String?        @db.Text
+    researchInterest String?        @db.Text // comma seperated string xyz;xyz;xyz 
+    contributions    Contribution[]
+    availableSlots   Int            @default(0) // Renamed to camelCase for consistency
+
+    user              User                @relation(fields: [userId], references: [id])
+    supervisedTheses  Thesis[]            @relation("SupervisedTheses")
+    SupervisorRequest SupervisorRequest[]
+    createdTasks      Task[]
+    notifications     Notification[]
+
+    @@map("faculties")
+}
+
+model Contribution {
+    id          Int      @id @default(autoincrement())
+    title       String   @db.VarChar(100)
+    subtitle    String   @db.VarChar(255)
+    description String   @db.Text // For longer text
+    url         String?  @db.VarChar(255) // Optional URL
+    createdAt   DateTime @default(now())
+
+    studentId Int?
+    facultyId Int?
+    student   Student? @relation(fields: [studentId], references: [id])
+    faculty   Faculty? @relation(fields: [facultyId], references: [id])
+
+    @@map("contributions")
+}
+
+model Thesis {
+    id           Int          @id @default(autoincrement())
+    title        String       @db.VarChar(200)
+    description  String?      @db.Text
+    researchTags String?      @db.Text // comma seperated string xyz;xyz;xyz 
+    Code         String       @unique @db.VarChar(50)
+    joinPassword String       @db.VarChar(100)
+    status       ThesisStatus @default(PENDING_SUPERVISOR)
+    createdAt    DateTime     @default(now())
+    updatedAt    DateTime     @updatedAt
+    supervisorId Int?
+
+    supervisor         Faculty?            @relation(fields: [supervisorId], references: [id], name: "SupervisedTheses")
+    members            ThesisMember[]
+    supervisorRequests SupervisorRequest[]
+    tasks              Task[]
+    notifications      Notification[]
+
+    @@map("theses")
+}
+
+model ThesisMember {
+    id        Int      @id @default(autoincrement())
+    thesisId  Int
+    studentId Int
+    creator   Boolean  @default(false)
+    joinedAt  DateTime @default(now())
+
+    thesis  Thesis  @relation(fields: [thesisId], references: [id])
+    student Student @relation(fields: [studentId], references: [id])
+
+    @@unique([thesisId, studentId])
+    @@map("thesis_members")
+}
+
+model SupervisorRequest {
+    id        Int      @id @default(autoincrement())
+    thesisId  Int
+    facultyId Int
+    studentId Int
+    message   String?  @db.Text
+    status    String   @default("PENDING") // PENDING, ACCEPTED, REJECTED
+    createdAt DateTime @default(now())
+
+    thesis  Thesis  @relation(fields: [thesisId], references: [id])
+    faculty Faculty @relation(fields: [facultyId], references: [id])
+    student Student @relation(fields: [studentId], references: [id])
+
+    @@map("supervisor_requests")
+}
+
+// New models for tasks, submissions, and notifications
+
+model Task {
+    id          Int       @id @default(autoincrement())
+    title       String    @db.VarChar(255)
+    description String?   @db.Text
+    dueDate     DateTime?
+    status      TaskStatus @default(PENDING)
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
+    thesisId    Int
+    facultyId   Int
+
+    thesis      Thesis           @relation(fields: [thesisId], references: [id])
+    faculty     Faculty          @relation(fields: [facultyId], references: [id])
+    submissions Submission[]
+
+    @@map("tasks")
+}
+
+model Submission {
+    id          Int      @id @default(autoincrement())
+    taskId      Int
+    studentId   Int
+    content     String   @db.Text
+    fileUrl     String?  @db.VarChar(255)
+    feedback    String?  @db.Text
+    grade       Int?
+    submittedAt DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    task    Task   @relation(fields: [taskId], references: [id])
+    student Student @relation(fields: [studentId], references: [id])
+
+    @@map("submissions")
+}
+
+model Notification {
+    id        Int              @id @default(autoincrement())
+    userId    Int
+    facultyId Int?
+    thesisId  Int?
+    type      NotificationType
+    title     String           @db.VarChar(255)
+    message   String           @db.Text
+    status    NotificationStatus @default(UNREAD)
+    relatedId Int? // Can reference a task, submission, request, etc.
+    createdAt DateTime         @default(now())
+
+    user   User   @relation(fields: [userId], references: [id])
+    faculty Faculty? @relation(fields: [facultyId], references: [id])
+    thesis  Thesis? @relation(fields: [thesisId], references: [id])
+
+    @@map("notifications")
+}

@@ -10,7 +10,7 @@
   "author": "ayonchan",
   "license": "ISC",
   "devDependencies": {
-    "prisma": "^6.14.0"
+    "prisma": "^6.12.0"
   },
   "dependencies": {
     "@prisma/client": "^6.12.0",

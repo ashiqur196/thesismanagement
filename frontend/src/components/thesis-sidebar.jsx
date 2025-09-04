@@ -5,11 +5,11 @@ import {
   Settings,
   NotebookPen,
   FolderOpen,
-  HomeIcon
+  HomeIcon,
 } from "lucide-react";
 import { NavMain } from "./nav-main";
 import { NavUser } from "./nav-user";
-// import { useAuth } from "../contexts/authContext";
+import { useAuth } from "../contexts/authContext";
 import { Link, useLocation, useParams } from "react-router-dom";
 import {
   Sidebar,
@@ -37,16 +37,16 @@ function SidebarCustomItem({ item }) {
 }
 
 export function ThesisSidebar() {
-//   const { currentUser } = useAuth();
+  //   const { currentUser } = useAuth();
   const location = useLocation();
   const { thesisId } = useParams();
+  const { currentUser } = useAuth();
 
   // Base URL for thesis routes
   const baseUrl = `/thesis/${thesisId}`;
 
   // Common items for all users in thesis context
   const commonItems = [
-    
     {
       title: "Overview",
       url: baseUrl,
@@ -101,6 +101,16 @@ export function ThesisSidebar() {
         url: `${baseUrl}/settings/delete`,
         isActive: location.pathname === `${baseUrl}/settings/delete`,
       },
+      // Conditionally add Supervisor Requests for students
+      ...(currentUser.role === "STUDENT"
+        ? [
+            {
+              title: "Supervisor Requests",
+              url: `${baseUrl}/settings/requests`,
+              isActive: location.pathname === `${baseUrl}/settings/requests`,
+            },
+          ]
+        : []),
     ],
   };
 

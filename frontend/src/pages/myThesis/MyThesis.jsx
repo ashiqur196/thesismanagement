@@ -97,7 +97,7 @@ function MyThesis() {
 
   if (loading && theses.length === 0) {
     return (
-      <div className="space-y-4">
+      <div className="container mx-auto space-y-4">
         <div className="flex flex-col md:flex-row gap-4 mb-6">
           <Skeleton className="h-10 w-full md:w-96" />
           <Skeleton className="h-10 w-[180px]" />
@@ -113,7 +113,7 @@ function MyThesis() {
 
   if (error) {
     return (
-      <div className="space-y-4 p-4">
+      <div className="container mx-auto space-y-4">
         <h2 className="text-xl font-semibold">Error</h2>
         <p className="text-red-500">{error}</p>
         <Button onClick={fetchTheses} className="mt-2">
@@ -124,7 +124,7 @@ function MyThesis() {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="container mx-auto space-y-4">
       {/* Filters Section */}
       <div className="flex flex-col sm:flex-row gap-4">
         <Input

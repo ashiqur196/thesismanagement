@@ -26,6 +26,13 @@ import ThesisAppointments from "./pages/thesisPages/thesisAppointments/ThesisApp
 import EditThesis from "./pages/thesisPages/thesisSettings/EditThesis";
 import ThesisCollaborators from "./pages/thesisPages/thesisSettings/ThesisCollaborators";
 import DeleteThesis from "./pages/thesisPages/thesisSettings/DeleteThesis";
+import BrowseSupervisors from "./pages/browseSupervisors/BrowseSupervisors";
+import Supervisor from "./pages/browseSupervisors/Supervisor";
+import ViewThesis from "./pages/viewThesis/ViewThesis";
+import SupervisingThesis from "./pages/supervising/SupervisingThesis";
+import SupervisingRequests from "./pages/supervising/SupervisingRequests";
+import SupervisingCompleted from "./pages/supervising/SupervisingCompleted";
+import Requests from "./pages/thesisPages/thesisSettings/Requests";
 
 const PrivateRoute = () => {
   const { isAuthenticated } = useAuth();
@@ -50,8 +57,16 @@ export default function Router() {
       <Route element={<PrivateRoute />}>
         <Route element={<SidebarLayout />}>
           <Route path="/" element={<Home />} />
+          <Route path="/supervisors" element={<BrowseSupervisors />} />
+          <Route path="/supervisors/:id" element={<Supervisor/>} />
           <Route path="/createthesis" element={<CreateThesis />} />
           <Route path="/mythesis" element={<MyThesis />} />
+          <Route path="/thesis-public/:thesisId" element={<ViewThesis />} />
+
+          <Route path="/supervising" element={<SupervisingThesis />} />
+          <Route path="/supervising/requests" element={<SupervisingRequests />} />
+          <Route path="/supervising/completed" element={<SupervisingCompleted />} />
+
           <Route path="/account/profile" element={<Myprofile />} />
           <Route path="/account/edit" element={<Editprofile />} />
           <Route path="/account/contributions" element={<Contributions />} />
@@ -64,6 +79,7 @@ export default function Router() {
           <Route path="settings">
             <Route index element={<Navigate to="edit" replace />} />
             <Route path="edit" element={<EditThesis />} />
+            <Route path="requests" element={<Requests />} />
             <Route path="collaborators" element={<ThesisCollaborators />} />
             <Route path="delete" element={<DeleteThesis />} />
           </Route>

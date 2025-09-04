@@ -1,0 +1,114 @@
+{
+  "faculties": [
+    {
+      "id": 1,
+      "userId": 101,
+      "name": "Dr. Sarah Johnson",
+      "department": "CSE",
+      "email": "sarahjohnson@email.com",
+      "password": "sarah1234",
+      "about": "Associate Professor specializing in Artificial Intelligence and Machine Learning with 10 years of experience.",
+      "researchInterest": ["AI", "Machine Learning", "Neural Networks"],
+      "availableSlots": 3
+    },
+    {
+      "id": 2,
+      "userId": 102,
+      "name": "Prof. Michael Chen",
+      "department": "CSE",
+      "email": "m.chen@university.edu",
+      "password": "Networking$2023",
+      "about": "Professor with expertise in Computer Networks and Distributed Systems.",
+      "researchInterest": ["Networking", "Cloud Computing", "IoT"],
+      "availableSlots": 2
+    },
+    {
+      "id": 3,
+      "userId": 103,
+      "name": "Dr. Emily Rodriguez",
+      "department": "MNS",
+      "email": "e.rodriguez@university.edu",
+      "password": "MathSci#2023",
+      "about": "Mathematics professor specializing in Applied Mathematics and Computational Modeling.",
+      "researchInterest": ["Applied Mathematics", "Computational Modeling", "Statistics"],
+      "availableSlots": 4
+    },
+    {
+      "id": 4,
+      "userId": 104,
+      "name": "Prof. James Wilson",
+      "department": "MNS",
+      "email": "j.wilson@university.edu",
+      "password": "Physics$2023",
+      "about": "Physics professor with research focus on Quantum Mechanics and Nanotechnology.",
+      "researchInterest": ["Quantum Mechanics", "Nanotechnology", "Materials Science"],
+      "availableSlots": 1
+    },
+    {
+      "id": 5,
+      "userId": 105,
+      "name": "Dr. Lisa Anderson",
+      "department": "EEE",
+      "email": "l.anderson@university.edu",
+      "password": "Electronics@2023",
+      "about": "Associate Professor in Electronics Engineering with specialization in VLSI Design.",
+      "researchInterest": ["VLSI Design", "Embedded Systems", "Semiconductor Devices"],
+      "availableSlots": 5
+    },
+    {
+      "id": 6,
+      "userId": 106,
+      "name": "Prof. Robert Kim",
+      "department": "EEE",
+      "email": "r.kim@university.edu",
+      "password": "PowerSys#2023",
+      "about": "Professor specializing in Power Systems and Renewable Energy technologies.",
+      "researchInterest": ["Power Systems", "Renewable Energy", "Smart Grid"],
+      "availableSlots": 2
+    },
+    {
+      "id": 7,
+      "userId": 107,
+      "name": "Dr. Amanda Williams",
+      "department": "CSE",
+      "email": "a.williams@university.edu",
+      "password": "DataScience$2023",
+      "about": "Assistant Professor focusing on Data Science and Big Data Analytics.",
+      "researchInterest": ["Data Science", "Big Data", "Data Visualization"],
+      "availableSlots": 3
+    },
+    {
+      "id": 8,
+      "userId": 108,
+      "name": "Prof. David Brown",
+      "department": "MNS",
+      "email": "d.brown@university.edu",
+      "password": "BioChem@2023",
+      "about": "Professor of Biochemistry with research in Molecular Biology and Genetics.",
+      "researchInterest": ["Biochemistry", "Molecular Biology", "Genetics"],
+      "availableSlots": 0
+    },
+    {
+      "id": 9,
+      "userId": 109,
+      "name": "Dr. Jennifer Lee",
+      "department": "EEE",
+      "email": "j.lee@university.edu",
+      "password": "ControlSys#2023",
+      "about": "Associate Professor specializing in Control Systems and Robotics.",
+      "researchInterest": ["Control Systems", "Robotics", "Automation"],
+      "availableSlots": 4
+    },
+    {
+      "id": 10,
+      "userId": 110,
+      "name": "Prof. Thomas Martin",
+      "department": "CSE",
+      "email": "t.martin@university.edu",
+      "password": "CyberSec$2023",
+      "about": "Professor of Computer Science with expertise in Cybersecurity and Cryptography.",
+      "researchInterest": ["Cybersecurity", "Cryptography", "Network Security"],
+      "availableSlots": 2
+    }
+  ]
+}

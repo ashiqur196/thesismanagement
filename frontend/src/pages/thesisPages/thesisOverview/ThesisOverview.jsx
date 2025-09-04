@@ -10,6 +10,7 @@ import {
 import { Badge } from "../../../components/ui/badge";
 import { Calendar, Tag, FileText, ClipboardList } from "lucide-react";
 import { Separator } from "../../../components/ui/separator";
+import { thesisManagementService } from "../../../services/thesisManagement";
 
 function Header({ thesis }) {
   if (!thesis) return null;
@@ -155,8 +156,169 @@ function ThesisOverview() {
   );
 }
 
-function TaskStats() {
-  return <div>task stats</div>;
+function TaskStats({ thesisId }) {
+  const [stats, setStats] = React.useState(null);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState(null);
+
+  React.useEffect(() => {
+    const fetchTaskStats = async () => {
+      try {
+        setLoading(true);
+        const result = await thesisManagementService.getTaskStats(thesisId);
+        
+        // Check if the API returned an error response
+        if (result.success === false) {
+          setError(result.message || "Failed to fetch task statistics");
+        } else if (result.data) {
+          // Use the data from the response
+          setStats(result.data);
+          setError(null);
+        } else {
+          // Handle case where response structure is unexpected
+          setError("Unexpected response format from server");
+        }
+      } catch (err) {
+        setError(err.message || "An unexpected error occurred");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (thesisId) {
+      fetchTaskStats();
+    }
+  }, [thesisId]);
+
+  if (loading) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Task Statistics</CardTitle>
+          <CardDescription>Loading task statistics...</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex justify-center py-8">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (error) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Task Statistics</CardTitle>
+          <CardDescription>Error loading statistics</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-col items-center justify-center py-8 text-destructive">
+            <p>{error}</p>
+            <p className="text-sm text-muted-foreground mt-2">
+              Please try again later
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (!stats) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Task Statistics</CardTitle>
+          <CardDescription>No statistics available</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex justify-center py-8 text-muted-foreground">
+            No task statistics found for this thesis
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // Calculate completion percentage
+  const completionPercentage = stats.totalTasks > 0 
+    ? Math.round((stats.completedTasks / stats.totalTasks) * 100) 
+    : 0;
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Task Statistics</CardTitle>
+        <CardDescription>
+          Overview of task progress for this thesis
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {/* Total Tasks */}
+          <div className="flex flex-col items-center p-4 bg-muted/30 rounded-lg">
+            <div className="text-3xl font-bold text-primary mb-2">
+              {stats.totalTasks || 0}
+            </div>
+            <div className="text-sm text-muted-foreground text-center">
+              Total Tasks
+            </div>
+          </div>
+
+          {/* Completed Tasks */}
+          <div className="flex flex-col items-center p-4 bg-muted/30 rounded-lg">
+            <div className="text-3xl font-bold text-green-600 mb-2">
+              {stats.completedTasks || 0}
+            </div>
+            <div className="text-sm text-muted-foreground text-center">
+              Completed Tasks
+            </div>
+          </div>
+
+          {/* Pending Tasks */}
+          <div className="flex flex-col items-center p-4 bg-muted/30 rounded-lg">
+            <div className="text-3xl font-bold text-amber-600 mb-2">
+              {stats.pendingTasks || 0}
+            </div>
+            <div className="text-sm text-muted-foreground text-center">
+              Pending Tasks
+            </div>
+          </div>
+
+          {/* Completion Percentage */}
+          <div className="flex flex-col items-center p-4 bg-muted/30 rounded-lg">
+            <div className="text-3xl font-bold text-blue-600 mb-2">
+              {completionPercentage}%
+            </div>
+            <div className="text-sm text-muted-foreground text-center">
+              Completion Rate
+            </div>
+          </div>
+        </div>
+
+        {/* Progress Bar */}
+        {stats.totalTasks > 0 && (
+          <div className="mt-6">
+            <div className="flex justify-between mb-2">
+              <span className="text-sm font-medium text-muted-foreground">
+                Progress
+              </span>
+              <span className="text-sm font-medium text-muted-foreground">
+                {completionPercentage}%
+              </span>
+            </div>
+            <div className="w-full bg-gray-200 rounded-full h-2.5">
+              <div
+                className="bg-primary h-2.5 rounded-full transition-all duration-300"
+                style={{ width: `${completionPercentage}%` }}
+              ></div>
+            </div>
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
 }
 
 export default ThesisOverview;
